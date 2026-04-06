@@ -3,16 +3,11 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 console.log('📡 Conectando ao banco...');
-console.log('   Usuário:', process.env.DB_USER);
-console.log('   Banco:', process.env.DB_NAME);
-console.log('   Host:', process.env.DB_HOST);
 
+// Usa DATABASE_URL no Render ou variáveis separadas no local
 const pool = new Pool({
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    database: process.env.DB_NAME,
+    connectionString: process.env.DATABASE_URL || `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
 // Testar conexão
